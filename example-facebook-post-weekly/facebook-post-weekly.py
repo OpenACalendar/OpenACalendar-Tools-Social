@@ -13,7 +13,7 @@ import facebook
 # MY_API_URL
 # MY_SITE_MSG
 # MY_GROUP_NAME
-# POST_TO_ID
+# POST_TO_ID = None
 
 def run():
 
@@ -58,7 +58,7 @@ def create_msg(data):
 
     for x in data:
         msgbits.append(x['displaystart'])
-        msgbits.append(x['summary'])
+        msgbits.append(x['summaryDisplay'])
         msgbits.append(x['url'])
         msgbits.append('')
 
@@ -83,7 +83,7 @@ def get_group_ids(graph):
         MY_GROUP_NAME,
     ]
     assert group_names, "Need to add some groups to post to"
-    group_ids = [x['id'] for x in my_groups if x['name'] in group_names]
+    return [x['id'] for x in my_groups if x['name'] in group_names]
 
 
 def post(msg):
@@ -91,10 +91,11 @@ def post(msg):
     graph = facebook.GraphAPI(token)
     profile = graph.get_object("me")
 
-    if POST_TO_ID:
-        group_ids = [ POST_TO_ID, ]
-    else:
+    if POST_TO_ID is None:
         group_ids = get_group_ids(graph)
+    else:
+        group_ids = [ POST_TO_ID, ]
+        
 
     print msg
     return
