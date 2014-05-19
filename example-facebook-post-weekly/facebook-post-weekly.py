@@ -73,7 +73,6 @@ def get_group_ids(graph):
     # Add your group names here
     group_names = [
         MY_GROUP_NAME,
-        # 'The Jazz List - Scotland',
     ]
     assert group_names, "Need to add some groups to post to"
     group_ids = [x['id'] for x in my_groups if x['name'] in group_names]
