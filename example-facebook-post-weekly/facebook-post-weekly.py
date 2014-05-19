@@ -13,7 +13,7 @@ import facebook
 # MY_API_URL
 # MY_SITE_MSG
 # MY_GROUP_NAME
-
+# POST_TO_ID
 
 def run():
 
@@ -24,6 +24,7 @@ def run():
 
 def get_from_cal_json():
 
+    print "Getting data from OpenACalendar"
 
     r = requests.get(MY_API_URL)
     if r.status_code != requests.codes.ok:
@@ -38,7 +39,10 @@ def get_from_cal_json():
         x for x in j['data']
         if x['start']['timestamp'] > now
         and x['start']['timestamp'] < inaweek
+        and not x['deleted']
     ]
+
+    print "Got Data From OpenACalendar"
 
     return data
 
@@ -64,12 +68,16 @@ def create_msg(data):
 
 
 def get_group_ids(graph):
+	
+    print "Getting Groups ID"
     # need user_groups permission
 
     # Why doesn't Facebook provide an API for getting the
     #    group id from the name?
     my_groups = graph.get_connections('me', 'groups')['data']
 
+    print "Got Group ID"
+    
     # Add your group names here
     group_names = [
         MY_GROUP_NAME,
@@ -83,13 +91,19 @@ def post(msg):
     graph = facebook.GraphAPI(token)
     profile = graph.get_object("me")
 
-    group_ids = get_group_ids(graph)
+    if POST_TO_ID:
+        group_ids = [ POST_TO_ID, ]
+    else:
+        group_ids = get_group_ids(graph)
 
     print msg
     return
+    
 
     for group_id in group_ids:
-        graph.put_object(group_id, "feed", message=msg)
+        print "Posting to "+str(group_id)
+        graph.put_object(str(group_id), "feed", message=msg)
+        print "Posted!"
 
 
 if __name__ == '__main__':
