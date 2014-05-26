@@ -12,7 +12,7 @@ You need to set 3 variables inside the code:
 
 3. MY_GROUP_NAME  or POST_TO_ID
 - What's the name of the group on Facebook (needed to find the group-id)
-- Use http://findmyfacebookid.com/ to find the ID for a group
+- Use http://lookup-id.com/ to find the ID for a group
 
 and one environment variable:
 
